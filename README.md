@@ -1,5 +1,9 @@
 # Hybrid-Force-Impedance-Control
 
+Based on:
+- [paper](https://doi.org/10.1109/LRA.2023.3270036)
+- [video](https://www.youtube.com/watch?v=rm8Irnc8v2M)
+
 ## Dependencies
 | Item           | Value                                                                    |
 |----------------|--------------------------------------------------------------------------|
