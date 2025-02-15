@@ -30,4 +30,4 @@ Based on:
 ## Reference
 
 1. [Compliant Control and Application](https://github.com/MingshanHe/Compliant-Control-and-Application)
-2. [Automtic Addison](https://github.com/automaticaddison/mycobot_ros2/tree/jazzy)
+2. [Automtic Addison](https://automaticaddison.com/how-to-simulate-a-robotic-arm-in-gazebo-ros-2-jazzy/)
