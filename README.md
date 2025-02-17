@@ -1,4 +1,4 @@
-# Hybrid-Force-Impedance-Control
+# hybrid-force-impedance-control
 
 Based on:
 - [paper](https://doi.org/10.1109/LRA.2023.3270036)
@@ -25,6 +25,10 @@ Based on:
 2. Launch the MoveIt:
 
 `ros2 launch ur_moveit_config ur_moveit.launch.py ur_type:=ur5e`
+
+3. To visualise the URDF:
+
+`ros2 launch ur_description view_ur.launch.py ur_type:=ur5`
 
 
 ## To Move the robot using in Gaebo and Real Hardware
