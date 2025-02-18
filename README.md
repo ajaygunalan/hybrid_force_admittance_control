@@ -20,18 +20,31 @@ Based on:
 
 1. Launch the UR5e drivers:
 
-`ros2 launch ur_robot_driver ur_control.launch.py ur_type:=ur5e robot_ip:=169.254.120.1 calibration_file:="${HOME}/my_robot_calibration.yaml"`
+```
+ros2 launch ur_robot_driver ur_control.launch.py ur_type:=ur5e robot_ip:=169.254.120.1 calibration_file:="${HOME}/my_robot_calibration.yaml"
+```
 
 2. Launch the MoveIt:
 
-`ros2 launch ur_moveit_config ur_moveit.launch.py ur_type:=ur5e`
+```
+ros2 launch ur_moveit_config ur_moveit.launch.py ur_type:=ur5e
+```
 
 3. To visualise the URDF:
 
-`ros2 launch ur_description view_ur.launch.py ur_type:=ur5`
+```
+ros2 launch ur_description view_ur.launch.py ur_type:=ur5
+```
 
 
 ## To Simulate a Robotic Arm in Gazebo & ROS2
+
+```
+bash /home/ajay/ros2_ws/src/hybrid_force_admittance_control/ur5e_bringup/scripts/ur5e_gazebo.sh
+
+
+ros2 run ur5e_system_tests  ur5e_loop_controller
+```
 ## Admittance Control
 ## Hybrid Force Admittance Control
 
