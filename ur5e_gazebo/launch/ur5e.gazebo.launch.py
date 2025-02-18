@@ -40,7 +40,7 @@ def generate_launch_description():
     # Constants for paths to different files and folders
     package_name_gazebo = 'ur5e_gazebo'
     package_name_description = 'ur5e_description'
-    package_name_moveit = 'ur_moveit_config'
+    package_name_moveit = 'ur5e_moveit_config'
 
     default_robot_name = 'ur5e'
     gazebo_models_path = 'models'

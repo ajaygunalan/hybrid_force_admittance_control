@@ -36,6 +36,15 @@ ros2 launch ur_moveit_config ur_moveit.launch.py ur_type:=ur5e
 ros2 launch ur_description view_ur.launch.py ur_type:=ur5
 ```
 
+## Basics
+
+```
+source /opt/ros/jazzy/setup.bash
+```
+
+```
+source install/setup.bash
+```
 
 ## To Simulate a Robotic Arm in Gazebo & ROS2
 
