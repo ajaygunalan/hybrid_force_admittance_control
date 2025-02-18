@@ -40,7 +40,7 @@ ros2 launch ur_description view_ur.launch.py ur_type:=ur5
 ## To Simulate a Robotic Arm in Gazebo & ROS2
 
 ```
-bash /home/ajay/ros2_ws/src/hybrid_force_admittance_control/ur5e_bringup/scripts/ur5e_gazebo.sh
+bash ~/ros2_ws/src/hybrid_force_admittance_control/ur5e_bringup/scripts/ur5e_gazebo.sh
 ```
 
 ```
