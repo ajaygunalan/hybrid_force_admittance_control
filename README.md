@@ -1,4 +1,4 @@
-# hybrid-force-impedance-control
+# hybrid-force-admittance-control
 
 Based on:
 - [paper](https://doi.org/10.1109/LRA.2023.3270036)
@@ -31,8 +31,9 @@ Based on:
 `ros2 launch ur_description view_ur.launch.py ur_type:=ur5`
 
 
-## To Move the robot using in Gaebo and Real Hardware
-
+## To Simulate a Robotic Arm in Gazebo & ROS2
+## Admittance Control
+## Hybrid Force Admittance Control
 
 ## Reference
 
