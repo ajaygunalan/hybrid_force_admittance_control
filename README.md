@@ -41,8 +41,9 @@ ros2 launch ur_description view_ur.launch.py ur_type:=ur5
 
 ```
 bash /home/ajay/ros2_ws/src/hybrid_force_admittance_control/ur5e_bringup/scripts/ur5e_gazebo.sh
+```
 
-
+```
 ros2 run ur5e_system_tests  ur5e_loop_controller
 ```
 ## Admittance Control
