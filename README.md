@@ -16,31 +16,22 @@ Based on:
 | Gazebo         | [Link](https://gazebosim.org/docs/latest/ros_installation/)              |
 
 
-## To Move the robot using MoveIt
-
-1. Launch the UR5e drivers:
-
-```
-ros2 launch ur_robot_driver ur_control.launch.py ur_type:=ur5e robot_ip:=169.254.120.1 calibration_file:="${HOME}/my_robot_calibration.yaml"
-```
-
-2. Launch the MoveIt:
-
-```
-ros2 launch ur_moveit_config ur_moveit.launch.py ur_type:=ur5e
-```
-
-3. To visualise the URDF:
-
-```
-ros2 launch ur_description view_ur.launch.py ur_type:=ur5
-```
-
 ## Basics
 
+
+Inside the `src` of your ROS2 workspace
+
 ```
-source /opt/ros/jazzy/setup.bash
+git clone git@github.com:ajaygunalan/hybrid_force_admittance_control.git && cd ..
 ```
+
+check the dependencies by:
+
+```
+rosdep install -i --from-path src --rosdistro jazzy -y
+```
+
+If successful, then do: 
 
 ```
 colcon build
@@ -49,6 +40,7 @@ colcon build
 ```
 source install/setup.bash
 ```
+
 
 ## To Simulate a Robotic Arm in Gazebo & ROS2
 
@@ -61,6 +53,9 @@ ros2 run ur5e_system_tests  ur5e_loop_controller
 ```
 ## Admittance Control
 ## Hybrid Force Admittance Control
+
+
+
 
 ## Reference
 
