@@ -3,7 +3,7 @@
 <package format="3">
   <name>ur5e_bringup</name>
   <version>0.0.0</version>
-  <description>Launch files and basic nodes for starting UR5e robot drivers and capabilities<</description>
+  <description>Launch files and basic nodes for starting UR5e robot drivers and capabilities</description>
   <maintainer email="ajaygunalan1995@gmai.com">ajay</maintainer>
   <license>MIT</license>
 
