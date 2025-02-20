@@ -28,16 +28,17 @@ def generate_launch_description():
     Returns:
         LaunchDescription: Launch description containing sequenced controller starts
     """
-    # Launch joint state broadcaster
-    start_joint_state_broadcaster_cmd = ExecuteProcess(
-        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
-             'joint_state_broadcaster'],
-        output='screen')
-
     # Start arm controller
     start_arm_controller_cmd = ExecuteProcess(
         cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
              'arm_controller'],
+        output='screen')
+
+
+    # Launch joint state broadcaster
+    start_joint_state_broadcaster_cmd = ExecuteProcess(
+        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
+             'joint_state_broadcaster'],
         output='screen')
 
     # Add delay to joint state broadcaster (if necessary)
@@ -46,16 +47,19 @@ def generate_launch_description():
         actions=[start_joint_state_broadcaster_cmd]
     )
 
-    # Register event handler to start arm controller after joint state broadcaster
-    load_arm_controller_cmd = RegisterEventHandler(
+    # Register event handlers for sequencing
+    # Launch the joint state broadcaster after spawning the robot
+    load_joint_state_broadcaster_cmd = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=start_joint_state_broadcaster_cmd,
-            on_exit=[start_arm_controller_cmd])
-    )
+            on_exit=[start_arm_controller_cmd]))
 
-    # Create the launch description and add actions in sequence
+
+    # Create the launch description and populate
     ld = LaunchDescription()
+
+    # Add the actions to the launch description in sequence
     ld.add_action(delayed_start)
-    ld.add_action(load_arm_controller_cmd)
+    ld.add_action(load_joint_state_broadcaster_cmd)
 
     return ld
