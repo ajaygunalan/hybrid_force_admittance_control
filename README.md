@@ -16,6 +16,11 @@ Based on:
 | Gazebo         | [Link](https://gazebosim.org/docs/latest/ros_installation/)              |
 
 
+# To Do
+1. Arm loop controller is not working — needs to be fixed.  
+2. implement admittance control.  
+3. Hybrid force-motion controller.
+
 ## Basics
 
 Do this in every terminal
@@ -59,8 +64,13 @@ bash ~/ros2_ws/src/hybrid_force_admittance_control/ur5e_bringup/scripts/ur5e_gaz
 ```
 ros2 run ur5e_system_tests  ur5e_loop_controller
 ```
+
+
+
+
+
 ## Admittance Control
-## Hybrid Force Admittance Control
+## Hybrid Force Motion Control
 
 
 
