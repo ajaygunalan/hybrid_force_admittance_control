@@ -18,6 +18,14 @@ Based on:
 
 ## Basics
 
+Do this in every terminal
+```
+source /opt/ros/jazzy/setup.bash
+```
+
+```
+source install/setup.bash
+```
 
 Inside the `src` of your ROS2 workspace
 
