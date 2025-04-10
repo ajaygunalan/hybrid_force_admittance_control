@@ -66,7 +66,12 @@ ros2 run ur5e_system_tests  ur5e_loop_controller
 ```
 
 
-
+/arm_controller
+/arm_gripper_loop_controller
+/controller_manager
+/gripper_action_controller
+/gz_ros_control
+/joint_state_broadcaster
 
 
 ## Admittance Control

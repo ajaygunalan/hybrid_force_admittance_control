@@ -1,8 +1,8 @@
 /**
- * @file arm_loop_controller.cpp
- * @brief Control robot arm to perform repetitive movements between positions.
+ * @file ur5e_loop_controller.cpp
+ * @brief Control UR5e robot arm to perform repetitive movements between positions.
  *
- * This program creates a ROS 2 node that moves a robot arm between target and home positions.
+ * This program creates a ROS 2 node that moves a UR5e arm between target and home positions.
  *
  * Action Client:
  *     /arm_controller/follow_joint_trajectory (control_msgs/FollowJointTrajectory):
@@ -31,9 +31,9 @@
      ArmLoopController() : Node("arm_loop_controller") {
          // Set up the action client for the arm controller
          arm_client_ = rclcpp_action::create_client<FollowJointTrajectory>(
-             this,
-             "/arm_controller/follow_joint_trajectory"
-         );
+            this, 
+            "/joint_trajectory_controller/follow_joint_trajectory"
+        );
  
          RCLCPP_INFO(this->get_logger(), "Waiting for arm action server...");
          if (!arm_client_->wait_for_action_server(20s)) {
@@ -42,49 +42,94 @@
          }
          RCLCPP_INFO(this->get_logger(), "Arm action server connected!");
  
-         // Initialize joint names and positions
+         // Initialize joint names and positions - Using UR5e joint names
          joint_names_ = {
-             "link1_to_link2", "link2_to_link3", "link3_to_link4",
-             "link4_to_link5", "link5_to_link6", "link6_to_link6_flange"
+             "shoulder_pan_joint", "shoulder_lift_joint", "elbow_joint",
+             "wrist_1_joint", "wrist_2_joint", "wrist_3_joint"
          };
  
-         target_pos_ = {1.345, -1.23, 0.264, -0.296, 0.389, -1.5};
-         home_pos_   = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+         // Define target positions
+         target_pos_ = {0.0, -0.5, 0.5, -0.5, -0.5, 0.0};
+         
+         // Define home positions
+         home_pos_ = {0.0, -1.57, 0.0, -1.57, 0.0, 0.0};
  
-         // Create timer for control loop
-         timer_ = this->create_wall_timer(
-             100ms,
-             std::bind(&ArmLoopController::controlLoopCallback, this)
-         );
+         // Create a timer to control the robot movement cycle
+         timer_ = this->create_wall_timer(10s, std::bind(&ArmLoopController::controlLoopCallback, this));
+         
+         // Start at home position
+         sendArmCommand(home_pos_);
      }
  
  private:
      // Send a command to move the robot arm to specified joint positions.
      void sendArmCommand(const std::vector<double>& positions) {
+         if (!arm_client_->wait_for_action_server(5s)) {
+             RCLCPP_ERROR(this->get_logger(), "Action server not available");
+             return;
+         }
+ 
+         // Create a goal message
          auto goal_msg = FollowJointTrajectory::Goal();
+ 
+         // Set up the trajectory
          goal_msg.trajectory.joint_names = joint_names_;
+         goal_msg.trajectory.points.resize(1);
+         goal_msg.trajectory.points[0].positions = positions;
+         goal_msg.trajectory.points[0].velocities.resize(positions.size(), 0.0);
+         goal_msg.trajectory.points[0].accelerations.resize(positions.size(), 0.0);
+         goal_msg.trajectory.points[0].time_from_start = rclcpp::Duration::from_seconds(2.0);
  
-         trajectory_msgs::msg::JointTrajectoryPoint point;
-         point.positions = positions;
-         point.time_from_start.sec = 2;  // 2 seconds for movement
-         goal_msg.trajectory.points.push_back(point);
- 
+         RCLCPP_INFO(this->get_logger(), "Sending goal");
+         
+         // Send the goal
          auto send_goal_options = rclcpp_action::Client<FollowJointTrajectory>::SendGoalOptions();
+         send_goal_options.goal_response_callback =
+             [this](auto) {
+                 RCLCPP_INFO(this->get_logger(), "Goal accepted");
+             };
+         send_goal_options.feedback_callback =
+             [this](auto, auto) {
+                 // Do nothing with feedback for now
+             };
+         send_goal_options.result_callback =
+             [this](const auto & result) {
+                 RCLCPP_INFO(this->get_logger(), "Got result");
+                 switch(result.code) {
+                     case rclcpp_action::ResultCode::SUCCEEDED:
+                         RCLCPP_INFO(this->get_logger(), "Goal succeeded");
+                         break;
+                     case rclcpp_action::ResultCode::ABORTED:
+                         RCLCPP_ERROR(this->get_logger(), "Goal aborted");
+                         break;
+                     case rclcpp_action::ResultCode::CANCELED:
+                         RCLCPP_ERROR(this->get_logger(), "Goal canceled");
+                         break;
+                     default:
+                         RCLCPP_ERROR(this->get_logger(), "Unknown result code");
+                         break;
+                 }
+             };
+ 
          arm_client_->async_send_goal(goal_msg, send_goal_options);
      }
  
      // Execute one cycle of the control loop: move to target, wait 5 seconds,
      // then return to home and wait 5 seconds.
      void controlLoopCallback() {
-         // Move to target position and wait 5 seconds
-         RCLCPP_INFO(this->get_logger(), "Moving to target position");
-         sendArmCommand(target_pos_);
-         std::this_thread::sleep_for(5000ms);  // 5 seconds wait
- 
-         // Return to home position and wait 5 seconds
-         RCLCPP_INFO(this->get_logger(), "Returning to home position");
-         sendArmCommand(home_pos_);
-         std::this_thread::sleep_for(5000ms);  // 5 seconds wait
+         // Check if we're at home or target position
+         static bool at_home = true;
+         
+         if (at_home) {
+             RCLCPP_INFO(this->get_logger(), "Moving to target position");
+             sendArmCommand(target_pos_);
+         } else {
+             RCLCPP_INFO(this->get_logger(), "Moving to home position");
+             sendArmCommand(home_pos_);
+         }
+         
+         // Toggle position for next callback
+         at_home = !at_home;
      }
  
      // Action client and timer
@@ -100,14 +145,7 @@
  int main(int argc, char** argv) {
      rclcpp::init(argc, argv);
      auto node = std::make_shared<ArmLoopController>();
- 
-     try {
-         rclcpp::spin(node);
-     } catch (const std::exception& e) {
-         RCLCPP_ERROR(node->get_logger(), "Exception caught: %s", e.what());
-     }
- 
+     rclcpp::spin(node);
      rclcpp::shutdown();
      return 0;
  }
- 

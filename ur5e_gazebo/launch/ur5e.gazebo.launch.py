@@ -39,7 +39,7 @@ def generate_launch_description():
     """
     # Constants for paths to different files and folders
     package_name_gazebo = 'ur5e_gazebo'
-    package_name_description = 'ur5e_description'
+    package_name_description = 'ur_description'
     package_name_moveit = 'ur5e_moveit_config'
 
     default_robot_name = 'ur5e'
@@ -266,10 +266,10 @@ def generate_launch_description():
     # Add the actions to the launch description
     ld.add_action(set_env_vars_resources)
     ld.add_action(robot_state_publisher_cmd)
-    ld.add_action(load_controllers_cmd)
     ld.add_action(start_gazebo_cmd)
     ld.add_action(start_gazebo_ros_bridge_cmd)
     ld.add_action(start_gazebo_ros_image_bridge_cmd)
     ld.add_action(start_gazebo_ros_spawner_cmd)
+    ld.add_action(load_controllers_cmd)
 
     return ld
