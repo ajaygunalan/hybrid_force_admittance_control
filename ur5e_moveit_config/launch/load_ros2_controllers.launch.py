@@ -28,11 +28,6 @@ def generate_launch_description():
     Returns:
         LaunchDescription: Launch description containing sequenced controller starts
     """
-    # Start arm controller
-    start_arm_controller_cmd = ExecuteProcess(
-        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
-             'arm_controller'],
-        output='screen')
 
 
     # Launch joint state broadcaster
@@ -40,6 +35,13 @@ def generate_launch_description():
         cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
              'joint_state_broadcaster'],
         output='screen')
+    
+        # Start arm controller
+    start_arm_controller_cmd = ExecuteProcess(
+        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
+             'arm_controller'],
+        output='screen')
+
 
     # Add delay to joint state broadcaster (if necessary)
     delayed_start = TimerAction(

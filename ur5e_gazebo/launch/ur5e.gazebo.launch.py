@@ -232,6 +232,7 @@ def generate_launch_description():
         arguments=[
             '-topic', '/robot_description',
             '-name', robot_name,
+            '-type', 'ur5e',
             '-allow_renaming', 'true',
             '-x', x,
             '-y', y,
